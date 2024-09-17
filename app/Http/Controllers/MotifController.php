@@ -14,7 +14,7 @@ class MotifController extends Controller
     public function index()
     {
         $liste = Motif::all();
-        return dd($liste);
+        return dump($liste);
     }
 
     /**
@@ -38,7 +38,7 @@ class MotifController extends Controller
      */
     public function show(Motif $motif)
     {
-        //
+
     }
 
     /**

@@ -13,8 +13,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        (new UserSeeder)->run();
         (new MotifSeeder)->run();
+        (new AbsenceSeeder)->run();
     }
 }

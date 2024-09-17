@@ -2,17 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\Motif;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
-class MotifSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Motif::factory()-> count(12)->create();
-
+        User::factory()-> count(10)->create();
     }
 }

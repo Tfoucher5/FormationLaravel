@@ -27,6 +27,11 @@ class Motif extends Model
 {
     use HasFactory;
 
+    public function absences()
+    {
+        return $this->hasMany(Absence::class, 'motif_id');
+    }
+
     protected function casts():array {
         return[
             'is-accessible-salarie' => 'boolean',

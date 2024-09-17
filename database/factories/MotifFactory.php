@@ -21,4 +21,5 @@ class MotifFactory extends Factory
             'is-accessible-salarie' => fake()->boolean(chanceOfGettingTrue: 50),
         ];
     }
+
 }

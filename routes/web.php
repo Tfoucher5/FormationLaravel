@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AbsenceController;
 use App\Http\Controllers\AccueilController;
 use App\Http\Controllers\MotifController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,4 +26,6 @@ Route::get('/', function () {
 //   ->name("");
 
 Route::get('cool', [AccueilController::class, 'index'] )->name('accueil');
-Route::get('motif', [MotifController::class, 'index'] )->name('accueil');
+Route::get('motif', [MotifController::class, 'index'] )->name('Motifs');
+Route::resource('/absence', AbsenceController::class);
+Route::resource('/user', UserController::class );
