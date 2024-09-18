@@ -15,11 +15,14 @@
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
         <h1 class="flex lg:justify-center lg:col-start-2 mt-7 text-9xl text-red-600">Formation Laravel</h1>
         <div class="flex lg:justify-center lg:col-start-2 mt-48">
-            <a class="text-9xl border-2 mr-2 border-red-600 text-red-600 p-36 inline-block rounded-lg hover:bg-red-600 hover:text-white" href="{{ route('absence.index') }}">
+            <a class="text-9xl border-2 mr-2 border-red-600 text-red-600 p-10 inline-block rounded-lg hover:bg-red-600 hover:text-white" href="{{ route('absence.index') }}">
                 Absences
             </a>
-            <a class="text-9xl border-2 border-red-600 text-red-600 p-36 inline-block rounded-lg hover:bg-red-600 hover:text-white" href="{{route('user.index')}}">
+            <a class="text-9xl border-2 mr-2 border-red-600 text-red-600 p-10 inline-block rounded-lg hover:bg-red-600 hover:text-white" href="{{route('user.index')}}">
                 Utilisateurs
+            </a>
+            <a class="text-9xl border-2 border-red-600 text-red-600 p-10 inline-block rounded-lg hover:bg-red-600 hover:text-white" href="{{route('motif.index')}}">
+                Motifs
             </a>
         </div>
     </body>

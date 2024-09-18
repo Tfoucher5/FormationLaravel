@@ -17,9 +17,17 @@ Liste des utilisateurs
                         <p class="text-lg font-semibold">Nom : <span class="text-gray-700">{{ $user->nom }}</span></p>
                     </div>
                     <div>
-                        <a href="{{ route('user.show', $user->id) }}" class="text-blue-500 hover:text-blue-700 font-semibold">
-                            Voir absences
-                        </a>
+
+                    </div>
+                    <div class="flex space-x-2">
+                        <a href="{{ route('user.show', $user->id) }}" class="text-blue-500 hover:text-blue-700 font-semibold  border border-blue-500 rounded-lg p-1">Voir absences</a>
+
+                        <a class="bg-blue-500 rounded-lg border border-black-850 p-1 font-bold text-center text-white" href="{{ route('user.edit', $user->id) }}">Modifier</a>
+                        <form action="{{ route('user.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-red-500 rounded-lg border border-black-850 p-1 font-bold text-center text-white">Supprimer</button>
+                        </form>
                     </div>
                 </li>
             @endforeach
