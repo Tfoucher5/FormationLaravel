@@ -6,8 +6,9 @@
 </head>
 <body class="bg-gray-100 min-h-screen p-10">
     <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Liste des Utilisateurs</h1>
-        <div class="mb-3">
+        <h1 class="text-3xl font-bold mb-2 text-center text-gray-800">Liste des Utilisateurs</h1>
+        <p class="text-xl mb-4 text-center">Nombre d'utilisateurs : {{ $users->count() }}</p>
+        <div class="mb-5">
             <a class="bg-gray-300 w-min rounded-lg border border-black-850 p-1 font-bold text-center text-gray-800" href="{{ url('/')}}">Retour</a>
         </div>
         <ul class="space-y-4">
