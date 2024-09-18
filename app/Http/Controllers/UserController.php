@@ -33,12 +33,11 @@ class UserController extends Controller
         //
     }
 
-    public function show($id)
+    public function show(User $user)
 {
-    $users = User::findOrFail($id);
     $motifs = Motif::all();
-    $absences = Absence::where('user_id', $users->id)->get();
+    $absences = Absence::where('user_id', $user->id)->get();
 
-    return view('user.show', compact('absences', 'users', 'motifs'));
+    return view('user.show', compact('absences', 'user', 'motifs'));
 }
 }

@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Détails de l'Absence</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="flex items-center justify-center min-h-screen bg-gray-100">
+@extends('layouts.app')
+@section('title')
+Détails de l'Absence
+@endsection
+@section('content')
+<div class="flex justify-center ">
     <div class="text-center">
         <h1 class="text-6xl mb-10">Absence n°{{ $absence->id }}</h1>
         <div class="mb-3">
@@ -25,5 +24,5 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+@endsection

@@ -25,7 +25,6 @@ Route::get('/', function () {
 // })->where(['chiffre' => '[0-9]+' , 'deuxieme' => '[0-9]+'])
 //   ->name("");
 
-Route::get('cool', [AccueilController::class, 'index'] )->name('accueil');
-Route::get('motif', [MotifController::class, 'index'] )->name('Motifs');
+Route::resource('/motif', MotifController::class);
 Route::resource('/absence', AbsenceController::class);
 Route::resource('/user', UserController::class );
