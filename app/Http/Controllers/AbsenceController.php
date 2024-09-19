@@ -4,28 +4,34 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AbsenceRequest;
 use App\Models\Absence;
 use App\Models\Motif;
 use App\Models\User;
-use DB;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\Session;
 
 class AbsenceController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
-        $absences = Absence::all();
+        $absences = Absence::with(['user', 'motif'])->get();
 
         return view('absence.index', compact('absences'));
     }
 
     /**
      * Show the form for creating a new resource.
+     *
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         $motifs = Motif::all();
         $users = User::all();
@@ -35,8 +41,11 @@ class AbsenceController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param AbsenceRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(AbsenceRequest $request): RedirectResponse
     {
         $absence = new Absence();
         $absence->user_id = $request->user_id;
@@ -45,84 +54,75 @@ class AbsenceController extends Controller
         $absence->date_fin = $request->date_fin;
         $absence->save();
 
-        return redirect()->route('absence.index');
+        return redirect('absence');
     }
 
     /**
      * Display the specified resource.
+     *
+     * @param Absence $absence
+     * @return void
      */
-    public function show($id)
+    public function show(Absence $absence): void
     {
-        // Récupérer l'absence avec l'utilisateur et le motif associés
-        $absence = Absence::with(['user', 'motif'])->where('id', $id)->first();
-
-        $motif = DB::table('motifs')
-            ->join('absences', 'motifs.id', '=', 'absences.motif_id')
-            ->where('absences.id', $id)
-            ->select('motifs.Libelle')
-            ->first();
-
-        $user = DB::table('users')
-            ->join('absences', 'users.id', '=', 'absences.user_id')
-            ->where('absences.id', $id)
-            ->select('users.prenom', 'users.nom')
-            ->first();
-
-        if (! $absence) {
-            return 'Aucune absence ne porte ce numéro d\'identification : '.$id;
-        }
-
-        // Afficher les détails de l'absence, y compris les informations utilisateur et motif
-        return view('absence.show', [
-            'absence' => $absence,
-            'user' => $user,
-            'motif' => $motif,
-        ]);
+        // Pas d'implémentation pour l'instant
     }
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * @param Absence $absence
+     * @return View
      */
-    public function edit(Absence $absence)
+    public function edit(Absence $absence): View
     {
-        $absences = Absence::where('id', $absence->id);
-        $motif_selected = Motif::where('id', $absence->motif_id)->get();
         $motifs = Motif::all();
-        $user_selected = User::where('id', $absence->user_id)->get();
         $users = User::all();
 
-        return view(view: 'absence.edit', data: compact('motifs', 'users', 'absence'));
+        return view('absence.edit', compact('motifs', 'users', 'absence'));
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param AbsenceRequest $request
+     * @param Absence $absence
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(AbsenceRequest $request, Absence $absence): RedirectResponse
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'motif_id' => 'required|exists:motifs,id',
-            'date_debut' => 'required|date|before:date_fin',
-            'date_fin' => 'required|date',
-        ]);
-
-        $absence = Absence::find($id);
         $absence->user_id = $request->user_id;
         $absence->motif_id = $request->motif_id;
         $absence->date_debut = $request->date_debut;
         $absence->date_fin = $request->date_fin;
         $absence->save();
 
-        return redirect()->route('absence.index')->with('success', 'Absence updated successfully.');
+        return redirect('absence');
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param Absence $absence
+     * @return RedirectResponse
      */
-    public function destroy(Absence $absence)
+    public function destroy(Absence $absence): RedirectResponse
     {
         $absence->delete();
 
-        return redirect('absence');
+        return redirect()->route('absence.index');
+    }
+
+    /**
+     * Restore the specified resource.
+     *
+     * @param Absence $absence
+     * @return RedirectResponse
+     */
+    public function restore(Absence $absence): RedirectResponse
+    {
+        $absence->restore();
+
+        return redirect()->route('absence.index');
     }
 }

@@ -8,10 +8,17 @@ use App\Models\Absence;
 use App\Models\Motif;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of the users.
+     *
+     * @return View
+     */
+    public function index(): View
     {
         $users = User::all();
 
@@ -19,21 +26,34 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new user.
+     *
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         return view('user.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created user in storage.
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function store(Request $request): void
+    public function store(Request $request): RedirectResponse
     {
+        // You would add your logic for storing the user here
+        return redirect()->route('user.index');
     }
 
-    public function show(User $user)
+    /**
+     * Display the specified user along with absences and motifs.
+     *
+     * @param User $user
+     * @return View
+     */
+    public function show(User $user): View
     {
         $motifs = Motif::all();
         $absences = Absence::where('user_id', $user->id)->get();

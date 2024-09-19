@@ -15,32 +15,44 @@
                     <label for="motif_id" class="block text-sm font-medium text-gray-600 mb-1">Motif de l'absence :</label>
                     <select name="motif_id" id="motif_id" class="block w-full border border-gray-300 rounded-lg p-2 text-gray-800">
                         @foreach ($motifs as $motif)
-                            <option value="{{ $motif->id }}" {{ $motif->id == $absence->motif_id ? 'selected' : '' }}>
+                            <option value="{{ $motif->id }}" {{ old('motif_id', $absence->motif_id) == $motif->id ? 'selected' : '' }}>
                                 {{ $motif->libelle }}
                             </option>
                         @endforeach
                     </select>
+                    @error('motif_id')
+                        <div class="text-red-500 mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="mb-4">
                     <label for="user_id" class="block text-sm font-medium text-gray-600 mb-1">Utilisateur :</label>
                     <select name="user_id" id="user_id" class="block w-full border border-gray-300 rounded-lg p-2 text-gray-800">
                         @foreach ($users as $user)
-                            <option value="{{ $user->id }}" {{ $user->id == $absence->user_id ? 'selected' : '' }}>
+                            <option value="{{ $user->id }}" {{ old('user_id', $absence->user_id) == $user->id ? 'selected' : '' }}>
                                 {{ $user->prenom . ' ' . $user->nom }}
                             </option>
                         @endforeach
                     </select>
+                    @error('user_id')
+                        <div class="text-red-500 mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="mb-4">
                     <label for="date_debut" class="block text-sm font-medium text-gray-600 mb-1">Date de début :</label>
                     <input type="date" name="date_debut" id="date_debut" value="{{ old('date_debut', $absence->date_debut) }}" class="block w-full border border-gray-300 rounded-lg p-2 text-gray-800">
+                    @error('date_debut')
+                        <div class="text-red-500 mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="mb-4">
                     <label for="date_fin" class="block text-sm font-medium text-gray-600 mb-1">Date de fin :</label>
                     <input type="date" name="date_fin" id="date_fin" value="{{ old('date_fin', $absence->date_fin) }}" class="block w-full border border-gray-300 rounded-lg p-2 text-gray-800">
+                    @error('date_fin')
+                        <div class="text-red-500 mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
 
