@@ -45,6 +45,9 @@ class MotifController extends Controller
     {
         $motif = new Motif();
         $motif->libelle = $request->libelle;
+
+        $motif->is_accessible_salarie = $request->is_accessible_salarie;
+
         $motif->save();
 
         return redirect('motif');
@@ -82,6 +85,9 @@ class MotifController extends Controller
     public function update(MotifRequest $request, Motif $motif): RedirectResponse
     {
         $motif->libelle = $request->libelle;
+
+        $motif->is_accessible_salarie = $request->input('is_accessible_salarie') === '1';
+
         $motif->save();
 
         return redirect('motif');

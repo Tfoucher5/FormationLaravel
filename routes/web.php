@@ -30,4 +30,5 @@ Route::resource('/motif', MotifController::class);
 
 Route::resource('/absence', AbsenceController::class);
 
+Route::get('user/{user}/restore', [UserController::class, 'restore'])->withTrashed()->name('user.restore');
 Route::resource('/user', UserController::class);

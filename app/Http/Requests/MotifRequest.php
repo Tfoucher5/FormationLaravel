@@ -25,6 +25,7 @@ class MotifRequest extends FormRequest
     {
         return [
             'libelle' => 'required|string|min:2|max:50',
+            'is_accessible_salarie' => 'required|boolean'
         ];
     }
 

@@ -60,6 +60,10 @@
                 <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline">
                     Mettre à jour
                 </button>
+                <div class="flex justify-end">
+                    <a class="mt-3 w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline"
+                        href="{{ route('absence.index') }}">Retour</a>
+                </div>
             </div>
         </form>
     </div>

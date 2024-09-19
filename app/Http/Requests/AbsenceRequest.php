@@ -27,6 +27,11 @@ class AbsenceRequest extends FormRequest
         return $rules;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         return [];

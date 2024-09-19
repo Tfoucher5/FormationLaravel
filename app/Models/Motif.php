@@ -14,11 +14,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property int $id
  * @property string $libelle
- * @property bool $is_accessible_salarie
+ * @property int $is-accessible-salarie
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Absence> $absences
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Absence> $absences
  * @property-read int|null $absences_count
  * @method static \Database\Factories\MotifFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Motif newModelQuery()

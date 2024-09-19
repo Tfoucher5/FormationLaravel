@@ -58,15 +58,20 @@ class AbsenceController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param Absence $absence
-     * @return void
-     */
-    public function show(Absence $absence): void
+ * Display the specified resource.
+ *
+ * @param Absence $absence
+ * @return \Illuminate\View\View
+ */
+    public function show(Absence $absence):View
     {
-        // Pas d'implémentation pour l'instant
+        $absences = Absence::where('id', $absence->id);
+        $motif = Motif::all();
+        $user = User::all();
+
+        return view('absence.show', compact('absences', 'motif', 'user'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
