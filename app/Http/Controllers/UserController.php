@@ -1,19 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Absence;
 use App\Models\Motif;
 use App\Models\User;
-use DB;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-
     public function index()
     {
         $users = User::all();
+
         return view('user.index', compact('users'));
     }
 
@@ -28,16 +29,15 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): void
     {
-        //
     }
 
     public function show(User $user)
-{
-    $motifs = Motif::all();
-    $absences = Absence::where('user_id', $user->id)->get();
+    {
+        $motifs = Motif::all();
+        $absences = Absence::where('user_id', $user->id)->get();
 
-    return view('user.show', compact('absences', 'user', 'motifs'));
-}
+        return view('user.show', compact('absences', 'user', 'motifs'));
+    }
 }

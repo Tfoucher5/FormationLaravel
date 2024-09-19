@@ -1,18 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- *
- *
  * @property int $id
  * @property string $Libelle
  * @property bool $is-accessible-salarie
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Motif newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Motif newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Motif query()
@@ -21,19 +23,22 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Motif whereIsAccessibleSalarie($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Motif whereLibelle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Motif whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Motif extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     public function absences()
     {
         return $this->hasMany(Absence::class, 'motif_id');
     }
 
-    protected function casts():array {
-        return[
+    protected function casts(): array
+    {
+        return [
             'is-accessible-salarie' => 'boolean',
         ];
     }
@@ -47,12 +52,10 @@ class Motif extends Model
     //     return Motif::all();
     // }
 
-
     // public function getAvecFiltresSimples($clausewhere)
     // {
     //     return Motif::where('Libelle', $clausewhere)->get();
     // }
-
 
     // public function getAvecFiltresSimplesMultiples($clausewhere)
     // {
@@ -117,7 +120,6 @@ class Motif extends Model
     //     ->delete();
     // }
 
-
     //
     //JOINTURES
     //
@@ -129,7 +131,6 @@ class Motif extends Model
     //     ->select('tests.*', 'essais.col1', 'essais.col2')
     //     ->get();
     // }
-
 
     // public function test()
     // {

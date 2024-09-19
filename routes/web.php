@@ -1,9 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Controllers\AbsenceController;
-use App\Http\Controllers\AccueilController;
 use App\Http\Controllers\MotifController;
-use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +25,9 @@ Route::get('/', function () {
 // })->where(['chiffre' => '[0-9]+' , 'deuxieme' => '[0-9]+'])
 //   ->name("");
 
+Route::get('motif/{motif}/restore', [MotifController::class, 'restore'])->withTrashed()->name('motif.restore');
 Route::resource('/motif', MotifController::class);
+
 Route::resource('/absence', AbsenceController::class);
-Route::resource('/user', UserController::class );
+
+Route::resource('/user', UserController::class);

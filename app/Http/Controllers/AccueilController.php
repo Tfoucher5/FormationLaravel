@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+declare(strict_types=1);
 
-use App\Http\Controllers\Controller;
+namespace App\Http\Controllers;
 
 class AccueilController extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
         // abort(500); //renvoie une erreur 500
     }
 
-    public function index(){
+    public function index()
+    {
         return view('welcome');
     }
 }

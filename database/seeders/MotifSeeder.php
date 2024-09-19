@@ -12,7 +12,7 @@ class MotifSeeder extends Seeder
      */
     public function run(): void
     {
-        Motif::factory()-> count(12)->create();
+        Motif::factory()->count(12)->create();
 
     }
 }

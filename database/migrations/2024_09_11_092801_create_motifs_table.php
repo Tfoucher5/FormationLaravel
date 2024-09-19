@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('motifs', function (Blueprint $table) {
             $table->id();
-            $table->string("libelle");
-            $table->boolean("is-accessible-salarie")->default(true);
+            $table->string('libelle');
+            $table->boolean('is-accessible-salarie')->default(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

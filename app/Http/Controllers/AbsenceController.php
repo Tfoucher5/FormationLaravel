@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Absence;
@@ -16,6 +18,7 @@ class AbsenceController extends Controller
     public function index()
     {
         $absences = Absence::all();
+
         return view('absence.index', compact('absences'));
     }
 
@@ -26,6 +29,7 @@ class AbsenceController extends Controller
     {
         $motifs = Motif::all();
         $users = User::all();
+
         return view('absence.create', compact('motifs', 'users'));
     }
 
@@ -34,7 +38,7 @@ class AbsenceController extends Controller
      */
     public function store(Request $request)
     {
-        $absence = new Absence;
+        $absence = new Absence();
         $absence->user_id = $request->user_id;
         $absence->motif_id = $request->motif_id;
         $absence->date_debut = $request->date_debut;
@@ -48,34 +52,33 @@ class AbsenceController extends Controller
      * Display the specified resource.
      */
     public function show($id)
-{
-    // Récupérer l'absence avec l'utilisateur et le motif associés
-    $absence = Absence::with(['user', 'motif'])->where('id', $id)->first();
+    {
+        // Récupérer l'absence avec l'utilisateur et le motif associés
+        $absence = Absence::with(['user', 'motif'])->where('id', $id)->first();
 
         $motif = DB::table('motifs')
-        ->join('absences', 'motifs.id', '=', 'absences.motif_id')
-        ->where('absences.id', $id)
-        ->select('motifs.Libelle')
-        ->first();
+            ->join('absences', 'motifs.id', '=', 'absences.motif_id')
+            ->where('absences.id', $id)
+            ->select('motifs.Libelle')
+            ->first();
 
         $user = DB::table('users')
-        ->join('absences', 'users.id', '=', 'absences.user_id')
-        ->where('absences.id', $id)
-        ->select('users.prenom', 'users.nom')
-        ->first();
+            ->join('absences', 'users.id', '=', 'absences.user_id')
+            ->where('absences.id', $id)
+            ->select('users.prenom', 'users.nom')
+            ->first();
 
-    if(!$absence)
-    {
-        return ('Aucune absence ne porte ce numéro d\'identification : ' . $id);
+        if (! $absence) {
+            return 'Aucune absence ne porte ce numéro d\'identification : '.$id;
+        }
+
+        // Afficher les détails de l'absence, y compris les informations utilisateur et motif
+        return view('absence.show', [
+            'absence' => $absence,
+            'user' => $user,
+            'motif' => $motif,
+        ]);
     }
-
-    // Afficher les détails de l'absence, y compris les informations utilisateur et motif
-    return view('absence.show', [
-        'absence' => $absence,
-        'user' => $user,
-        'motif' => $motif
-    ]);
-}
 
     /**
      * Show the form for editing the specified resource.
@@ -87,6 +90,7 @@ class AbsenceController extends Controller
         $motifs = Motif::all();
         $user_selected = User::where('id', $absence->user_id)->get();
         $users = User::all();
+
         return view(view: 'absence.edit', data: compact('motifs', 'users', 'absence'));
     }
 
@@ -118,6 +122,7 @@ class AbsenceController extends Controller
     public function destroy(Absence $absence)
     {
         $absence->delete();
+
         return redirect('absence');
     }
 }

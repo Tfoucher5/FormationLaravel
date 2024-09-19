@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,5 +22,4 @@ class Absence extends Model
     {
         return $this->belongsTo(Motif::class, 'motif_id');
     }
-
 }
