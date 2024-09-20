@@ -58,16 +58,16 @@ class AbsenceController extends Controller
     }
 
     /**
- * Display the specified resource.
- *
- * @param Absence $absence
- * @return \Illuminate\View\View
- */
-    public function show(Absence $absence):View
+     * Display the specified resource.
+     *
+     * @param Absence $absence
+     * @return \Illuminate\View\View
+     */
+    public function show(Absence $absence): View
     {
-        $absences = Absence::where('id', $absence->id);
-        $motif = Motif::all();
-        $user = User::all();
+        $absences = Absence::where('id', $absence->id)->with('motif', 'user')->first();  // Charge l'absence avec ses relations
+        $motif = $absence->motif; // Accède au motif lié à cette absence
+        $user = $absence->user;   // Accède à l'utilisateur lié à cette absence
 
         return view('absence.show', compact('absences', 'motif', 'user'));
     }
