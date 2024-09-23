@@ -6,6 +6,7 @@ use App\Models\Absence;
 use App\Models\Motif;
 use App\Models\User;
 use DB;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -60,15 +61,16 @@ class UserController extends Controller
         if ($nb === 0) {
             $user->delete();
         } else {
-            session::put('message', "L'utilisateur est encore utilisé par {$nb} absence(s)");
+            session()->put('message', "L'utilisateur est encore utilisé par {$nb} absence(s)");
         }
 
         return redirect('user');
     }
 
+
     public function restore(User $user): RedirectResponse
     {
-        $motif->restore();
+        $user->restore();
 
         return redirect('motif');
     }

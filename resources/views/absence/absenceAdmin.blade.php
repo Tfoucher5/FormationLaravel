@@ -4,18 +4,14 @@ Liste des utilisateurs
 @endsection
 @section('content')
 <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-    <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Liste des Absences @if (auth()->user()->isA('admin'))(Administration) @endif </h1>
+    <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Liste de mes Absences </h1>  
     <div class="mb-3">
         <a class="bg-gray-300 w-min rounded-lg border border-black-850 p-1 font-bold text-center text-gray-800"
-            href="{{ url('/')}}">Retour</a>
+            href="{{ url('absence')}}">Retour</a>
         @can('create-absence')
             <a class="bg-gray-300 w-min rounded-lg border border-black-850 p-1 font-bold text-center text-gray-800"
                 href="{{ route('absence.create')}}">Créer</a>
         @endcan
-        @if(auth()->user()->isA('admin'))
-            <a class="bg-gray-300 w-min rounded-lg border border-black-850 p-1 font-bold text-center text-gray-800"
-                href="{{ route('absence.vue', auth()->user()->id) }}">Voir mes absences</a>
-        @endif
     </div>
     <ul class="space-y-4">
         @foreach ($absences as $absence)
@@ -38,25 +34,6 @@ Liste des utilisateurs
                             <a class="bg-blue-500 rounded-lg border border-black-850 p-1 font-bold text-center text-white"
                                 href="{{ route('absence.edit', $absence->id) }}">Modifier</a>
                         @endcan
-                    @endif
-                    @can('delete-absence')
-                        <form action="{{ route('absence.destroy', $absence->id) }}" method="POST"
-                            onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette absence ?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                class="bg-red-500 rounded-lg border border-black-850 p-1 font-bold text-center text-white">Supprimer</button>
-                        </form>
-                    @endcan
-                    @if (auth()->user()->isA('admin') && $absence->is_verified === 0)
-                        <form action="{{ route('absence.validate', $absence->id) }}" method="POST" class="inline">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit"
-                                class="bg-green-500 rounded-lg border border-black-850 p-1 font-bold text-center text-white">
-                                Valider
-                            </button>
-                        </form>
                     @endif
                 </div>
             </li>

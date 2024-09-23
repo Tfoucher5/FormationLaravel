@@ -21,6 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('/absence', AbsenceController::class);
     Route::resource('/user', UserController::class);
     Route::resource('/motif', MotifController::class);
+    Route::put('/absence/validate/{id}', [AbsenceController::class, 'validateAbsence'])->name('absence.validate');
+    Route::get('/absence/vue/{id}', [AbsenceController::class, 'voirAbsence'])->name('absence.vue');
 });
 
 Route::get('motif/{motif}/restore', [MotifController::class, 'restore'])->withTrashed()->name('motif.restore');

@@ -14,7 +14,7 @@ Détails de l'Absence
                 <p><strong>Utilisateur :</strong> {{ $user->prenom }} {{ $user->nom }}</p>
             </div>
             <div class="mb-4">
-                <p><strong>Motif :</strong> {{ $motif->Libelle }}</p>
+                <p><strong>Motif :</strong> {{ $motif->libelle }}</p>
             </div>
             <div class="mb-4">
                 <p><strong>Date de Début :</strong> {{ $absences->date_debut }}</p>

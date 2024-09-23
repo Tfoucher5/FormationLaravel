@@ -19,8 +19,7 @@ class AbsenceController extends Controller
      */
     public function index()
     {
-        if (auth()->user()->isA('admin'))
-        {
+        if (auth()->user()->isA('admin')) {
             $absences = Absence::where('user_id', '!=', auth()->user()->id)->get();
         } else {
             $absences = Absence::where('user_id', auth()->id())->get();
@@ -34,11 +33,7 @@ class AbsenceController extends Controller
     public function create()
     {
         $motifs = Motif::all();
-        if (auth()->user()->isA('admin')) {
-            $users = User::where('id', '!=', auth()->user()->id)->get();
-        } else {
-            $users = User::where('id', auth()->id())->get();
-        }
+        $users = User::all();
 
         return view('absence.create', compact('motifs', 'users'));
     }
@@ -46,7 +41,7 @@ class AbsenceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AbsenceRequest $request)
     {
         $absence = new Absence();
         $absence->user_id = $request->user_id;
@@ -76,11 +71,7 @@ class AbsenceController extends Controller
     public function edit(Absence $absence)
     {
         $motifs = Motif::all();
-        if (auth()->user()->isA('admin')) {
-            $users = User::where('id', '!=', auth()->user()->id)->get();
-        } else {
-            $users = User::where('id', auth()->id())->get();
-        }
+        $users = User::all();
 
         return view('absence.edit', compact('motifs', 'users', 'absence'));
     }
@@ -88,7 +79,7 @@ class AbsenceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Absence $absence)
+    public function update(AbsenceRequest $request, Absence $absence)
     {
         $absence->user_id = $request->user_id;
         $absence->motif_id = $request->motif_id;
@@ -127,5 +118,27 @@ class AbsenceController extends Controller
         $absence->restore();
 
         return redirect()->route('absence.index');
+    }
+
+    public function validateAbsence($id)
+    {
+        if (auth()->user()->id != $id) {
+            $absence = Absence::findOrFail($id);
+
+            $absence->is_verified = true;
+            $absence->save();
+
+            return redirect('absence');
+        } else {
+            return redirect('absence');
+        }
+
+    }
+
+    public function voirAbsence()
+    {
+        $absences = Absence::where('user_id', auth()->user()->id)->get();
+
+        return view('absence.absenceAdmin', compact('absences'));
     }
 }
