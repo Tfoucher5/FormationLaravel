@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Absence;
 use DB;
 use Illuminate\Http\Request;
+use App\Http\Requests\AbsenceRequest;
+use App\Models\Motif;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\Session;
 
 class AbsenceController extends Controller
 {
@@ -13,7 +19,12 @@ class AbsenceController extends Controller
      */
     public function index()
     {
-        $absences = Absence::all();
+        if (auth()->user()->isA('admin'))
+        {
+            $absences = Absence::where('user_id', '!=', auth()->user()->id)->get();
+        } else {
+            $absences = Absence::where('user_id', auth()->id())->get();
+        }
         return view('absence.index', compact('absences'));
     }
 
@@ -22,7 +33,14 @@ class AbsenceController extends Controller
      */
     public function create()
     {
-        return view('absence.create');
+        $motifs = Motif::all();
+        if (auth()->user()->isA('admin')) {
+            $users = User::where('id', '!=', auth()->user()->id)->get();
+        } else {
+            $users = User::where('id', auth()->id())->get();
+        }
+
+        return view('absence.create', compact('motifs', 'users'));
     }
 
     /**
@@ -30,48 +48,41 @@ class AbsenceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $absence = new Absence();
+        $absence->user_id = $request->user_id;
+        $absence->motif_id = $request->motif_id;
+        $absence->date_debut = $request->date_debut;
+        $absence->date_fin = $request->date_fin;
+        $absence->save();
+
+        return redirect('absence');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
-{
-    // Récupérer l'absence avec l'utilisateur et le motif associés
-    $absence = Absence::with(['user', 'motif'])->where('id', $id)->first();
-
-        $motif = DB::table('motifs')
-        ->join('absences', 'motifs.id', '=', 'absences.motif_id')
-        ->where('absences.id', $id)
-        ->select('motifs.Libelle')
-        ->first();
-
-        $user = DB::table('users')
-        ->join('absences', 'users.id', '=', 'absences.user_id')
-        ->where('absences.id', $id)
-        ->select('users.prenom', 'users.nom')
-        ->first();
-
-    if(!$absence)
+    public function show(Absence $absence)
     {
-        return ('Aucune absence ne porte ce numéro d\'identification : ' . $id);
-    }
+        $absences = Absence::where('id', $absence->id)->with('motif', 'user')->first();
+        $motif = $absence->motif;
+        $user = $absence->user;
 
-    // Afficher les détails de l'absence, y compris les informations utilisateur et motif
-    return view('absence.show', [
-        'absence' => $absence,
-        'user' => $user,
-        'motif' => $motif
-    ]);
-}
+        return view('absence.show', compact('absences', 'motif', 'user'));
+    }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Absence $absence)
     {
-        return view('absence.edit');
+        $motifs = Motif::all();
+        if (auth()->user()->isA('admin')) {
+            $users = User::where('id', '!=', auth()->user()->id)->get();
+        } else {
+            $users = User::where('id', auth()->id())->get();
+        }
+
+        return view('absence.edit', compact('motifs', 'users', 'absence'));
     }
 
     /**
@@ -79,7 +90,13 @@ class AbsenceController extends Controller
      */
     public function update(Request $request, Absence $absence)
     {
-        //
+        $absence->user_id = $request->user_id;
+        $absence->motif_id = $request->motif_id;
+        $absence->date_debut = $request->date_debut;
+        $absence->date_fin = $request->date_fin;
+        $absence->save();
+
+        return redirect('absence');
     }
 
     /**
@@ -87,6 +104,28 @@ class AbsenceController extends Controller
      */
     public function destroy(Absence $absence)
     {
-        //
+
+        if (auth()->user()->isA('salarié')) {
+            // Ajouter un message d'erreur dans la session et rediriger
+            return redirect()->route('absence.index')->with('error', 'Vous n\'avez pas les permissions pour supprimer une absence.');
+        }
+
+        // Si l'utilisateur n'est pas un salarié, il peut supprimer l'absence
+        $absence->delete();
+
+        return redirect()->route('absence.index')->with('success', 'L\'absence a été supprimée avec succès.');
+    }
+
+    /**
+     * Restore the specified resource.
+     *
+     * @param Absence $absence
+     * @return RedirectResponse
+     */
+    public function restore(Absence $absence): RedirectResponse
+    {
+        $absence->restore();
+
+        return redirect()->route('absence.index');
     }
 }

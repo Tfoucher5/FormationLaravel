@@ -18,7 +18,7 @@ class MotifFactory extends Factory
     {
         return [
             'Libelle' => fake()->realText(20),
-            'is-accessible-salarie' => fake()->boolean(chanceOfGettingTrue: 50),
+            'is_accessible_salarie' => fake()->boolean(chanceOfGettingTrue: 50),
         ];
     }
 

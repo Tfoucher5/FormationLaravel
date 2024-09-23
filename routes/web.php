@@ -1,31 +1,31 @@
 <?php
 
-use App\Http\Controllers\AbsenceController;
-use App\Http\Controllers\AccueilController;
-use App\Http\Controllers\MotifController;
-use App\Http\Controllers\TestController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AbsenceController;
+use App\Http\Controllers\MotifController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('cool', function(){
-//     return "Cool, Laravel !";
-// });
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route::get('test/profil', function(){
-//     return "Ceci est un test";
-// })-> name('profil');
-// //permet d'utiliser route('profil')
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::resource('/absence', AbsenceController::class);
+    Route::resource('/user', UserController::class);
+    Route::resource('/motif', MotifController::class);
+});
 
-// Route::get('{chiffre}/{deuxieme}', function ($chiffre, $deuxieme) {
-//     return "le résultat de $chiffre + $deuxieme est " . $chiffre + $deuxieme;
-// })->where(['chiffre' => '[0-9]+' , 'deuxieme' => '[0-9]+'])
-//   ->name("");
+Route::get('motif/{motif}/restore', [MotifController::class, 'restore'])->withTrashed()->name('motif.restore');
+Route::get('user/{user}/restore', [UserController::class, 'restore'])->withTrashed()->name('user.restore');
 
-Route::get('cool', [AccueilController::class, 'index'] )->name('accueil');
-Route::get('motif', [MotifController::class, 'index'] )->name('Motifs');
-Route::resource('/absence', AbsenceController::class);
-Route::resource('/user', UserController::class );
+
+
+require __DIR__.'/auth.php';

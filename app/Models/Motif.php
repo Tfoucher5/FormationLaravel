@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
 
 /**
  *
@@ -26,6 +28,8 @@ use Illuminate\Database\Eloquent\Model;
 class Motif extends Model
 {
     use HasFactory;
+    use softDeletes;
+    use HasRolesAndAbilities;
 
     public function absences()
     {

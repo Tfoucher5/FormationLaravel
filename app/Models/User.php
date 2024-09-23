@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  *
@@ -36,11 +38,16 @@ use Illuminate\Notifications\Notifiable;
  */
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRolesAndAbilities, softDeletes;
 
     public function absences()
     {
         return $this->hasMany(Absence::class, 'user_id');
+    }
+
+    public function getInitialesAttribute()
+    {
+        return ucfirst($this->prenom)[0] . ucfirst($this->nom)[0];
     }
 
     /**
@@ -49,8 +56,10 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'prenom',
+        'nom',
         'email',
+        'admin',
         'password',
     ];
 

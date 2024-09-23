@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Absences de l'Utilisateur</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 min-h-screen p-10">
-    <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Absences de {{ $users->prenom }} {{ $users->nom }}</h1>
+@extends('layouts.app')
+@section('title')
+Absences de l'Utilisateur
+@endsection
+@section('content')
+<div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Absences de {{ $user->prenom }} {{ $user->nom }}</h1>
         <div class="mb-3">
             <a class="bg-gray-300 w-min rounded-lg border border-black-850 p-2 font-bold text-center text-gray-800" href="{{ url('/user')}}">Retour</a>
         </div>
@@ -33,5 +31,4 @@
             @endforelse
         </ul>
     </div>
-</body>
-</html>
+@endsection

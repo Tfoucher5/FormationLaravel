@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Détails de l'Absence</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="flex items-center justify-center min-h-screen bg-gray-100">
+@extends('layouts.app')
+@section('title')
+Détails de l'Absence
+@endsection
+@section('content')
+<div class="flex justify-center ">
     <div class="text-center">
-        <h1 class="text-6xl mb-10">Absence n°{{ $absence->id }}</h1>
+        <h1 class="text-6xl mb-10">Absence n°{{ $absences->id }}</h1>
         <div class="mb-3">
             <a class="bg-gray-300 w-min rounded-lg border border-black-850 p-2 font-bold text-center text-gray-800" href="{{ url('/absence')}}">Retour</a>
         </div>
@@ -18,12 +17,12 @@
                 <p><strong>Motif :</strong> {{ $motif->Libelle }}</p>
             </div>
             <div class="mb-4">
-                <p><strong>Date de Début :</strong> {{ $absence->date_debut }}</p>
+                <p><strong>Date de Début :</strong> {{ $absences->date_debut }}</p>
             </div>
             <div>
-                <p><strong>Date de Fin :</strong> {{ $absence->date_fin }}</p>
+                <p><strong>Date de Fin :</strong> {{ $absences->date_fin }}</p>
             </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+@endsection
