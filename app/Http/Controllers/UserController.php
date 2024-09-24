@@ -5,18 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Absence;
 use App\Models\Motif;
 use App\Models\User;
-use DB;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-
     public function index()
     {
-        if (auth()->user()->isA('admin'))
-        {
+        if (auth()->user()->isA('admin')) {
             $users = User::all();
+
             return view('user.index', compact('users'));
         } else {
             return redirect('/');
@@ -29,8 +27,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        if (auth()->user()->isA('admin'))
-        {
+        if (auth()->user()->isA('admin')) {
             return view('user.create');
         } else {
             return redirect('/');
@@ -66,7 +63,6 @@ class UserController extends Controller
 
         return redirect('user');
     }
-
 
     public function restore(User $user): RedirectResponse
     {

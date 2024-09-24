@@ -5,7 +5,7 @@ Détails de l'Absence
 @section('content')
 <div class="flex justify-center ">
     <div class="text-center">
-        <h1 class="text-6xl mb-10">Absence n°{{ $absences->id }}</h1>
+        <h1 class="text-6xl mb-10">Absence</h1>
         <div class="mb-3">
             <a class="bg-gray-300 w-min rounded-lg border border-black-850 p-2 font-bold text-center text-gray-800" href="{{ url('/absence')}}">Retour</a>
         </div>
@@ -17,10 +17,10 @@ Détails de l'Absence
                 <p><strong>Motif :</strong> {{ $motif->libelle }}</p>
             </div>
             <div class="mb-4">
-                <p><strong>Date de Début :</strong> {{ $absences->date_debut }}</p>
+                <p><strong>Date de Début :</strong> {{ \Carbon\Carbon::parse($absences->date_debut)->format('d/m/Y')}}</p>
             </div>
             <div>
-                <p><strong>Date de Fin :</strong> {{ $absences->date_fin }}</p>
+                <p><strong>Date de Fin :</strong> {{ \Carbon\Carbon::parse($absences->date_fin)->format('d/m/Y') }}</p>
             </div>
         </div>
     </div>

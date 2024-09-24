@@ -29,7 +29,7 @@ Liste des utilisateurs
                     @can('view-user')
                         <a href="{{ route('user.show', $user->id) }}"
                             class="text-blue-500 hover:text-blue-700 font-semibold  border border-blue-500 rounded-lg p-1">Voir
-                            utilisateur(s)</a>
+                            utilisateur</a>
                     @endcan
                     @can('edit-user')
                         <a class="bg-blue-500 rounded-lg border border-black-850 p-1 font-bold text-center text-white"

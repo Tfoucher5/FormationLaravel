@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AbsenceController;
 use App\Http\Controllers\MotifController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,7 +27,5 @@ Route::middleware('auth')->group(function () {
 
 Route::get('motif/{motif}/restore', [MotifController::class, 'restore'])->withTrashed()->name('motif.restore');
 Route::get('user/{user}/restore', [UserController::class, 'restore'])->withTrashed()->name('user.restore');
-
-
 
 require __DIR__.'/auth.php';

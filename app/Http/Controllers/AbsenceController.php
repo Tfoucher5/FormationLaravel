@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Absence;
-use DB;
-use Illuminate\Http\Request;
 use App\Http\Requests\AbsenceRequest;
+use App\Models\Absence;
 use App\Models\Motif;
 use App\Models\User;
+use App\Mail\AbsenceMail;
+use App\Mail\ModifAbsenceMail;
+use App\Mail\absenceValidatedMail;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Mail;
 
 class AbsenceController extends Controller
 {
@@ -24,6 +25,7 @@ class AbsenceController extends Controller
         } else {
             $absences = Absence::where('user_id', auth()->id())->get();
         }
+
         return view('absence.index', compact('absences'));
     }
 
@@ -32,8 +34,12 @@ class AbsenceController extends Controller
      */
     public function create()
     {
-        $motifs = Motif::all();
-        $users = User::all();
+        $motifs = Motif::where('is_accessible_salarie', true)->get();
+        if (auth()->user()->isA('admin')) {
+            $users = User::all();
+        } else {
+            $users = User::where('id', auth()->user()->id)->get();
+        }
 
         return view('absence.create', compact('motifs', 'users'));
     }
@@ -43,12 +49,17 @@ class AbsenceController extends Controller
      */
     public function store(AbsenceRequest $request)
     {
-        $absence = new Absence();
+        $absence = new Absence;
         $absence->user_id = $request->user_id;
         $absence->motif_id = $request->motif_id;
         $absence->date_debut = $request->date_debut;
         $absence->date_fin = $request->date_fin;
         $absence->save();
+
+        $admins = User::where('admin', true)->get();
+        foreach ($admins as $admin) {
+            Mail::to($admin->email)->send(new AbsenceMail($absence->user, $absence->motif, $absence));
+        }
 
         return redirect('absence');
     }
@@ -70,7 +81,7 @@ class AbsenceController extends Controller
      */
     public function edit(Absence $absence)
     {
-        $motifs = Motif::all();
+        $motifs = Motif::where('is_accessible_salarie', true)->get();
         $users = User::all();
 
         return view('absence.edit', compact('motifs', 'users', 'absence'));
@@ -87,6 +98,11 @@ class AbsenceController extends Controller
         $absence->date_fin = $request->date_fin;
         $absence->save();
 
+        $admins = User::where('admin', true)->get();
+        foreach ($admins as $admin) {
+            Mail::to($admin->email)->send(new ModifAbsenceMail($absence->user, $absence->motif, $absence));
+        }
+
         return redirect('absence');
     }
 
@@ -98,20 +114,17 @@ class AbsenceController extends Controller
 
         if (auth()->user()->isA('salarié')) {
             // Ajouter un message d'erreur dans la session et rediriger
-            return redirect()->route('absence.index')->with('error', 'Vous n\'avez pas les permissions pour supprimer une absence.');
+            return redirect('absence.index');
         }
 
         // Si l'utilisateur n'est pas un salarié, il peut supprimer l'absence
         $absence->delete();
 
-        return redirect()->route('absence.index')->with('success', 'L\'absence a été supprimée avec succès.');
+        return redirect('absence.index');
     }
 
     /**
      * Restore the specified resource.
-     *
-     * @param Absence $absence
-     * @return RedirectResponse
      */
     public function restore(Absence $absence): RedirectResponse
     {
@@ -127,6 +140,8 @@ class AbsenceController extends Controller
 
             $absence->is_verified = true;
             $absence->save();
+
+            Mail::to($absence->user->email)->send(new AbsenceValidatedMail($absence->user, $absence));
 
             return redirect('absence');
         } else {

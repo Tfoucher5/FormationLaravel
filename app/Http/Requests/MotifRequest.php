@@ -8,8 +8,6 @@ class MotifRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -25,7 +23,7 @@ class MotifRequest extends FormRequest
     {
         return [
             'libelle' => 'required|string|min:2|max:50',
-            'is_accessible_salarie' => 'required|boolean'
+            'is_accessible_salarie' => 'required|boolean',
         ];
     }
 

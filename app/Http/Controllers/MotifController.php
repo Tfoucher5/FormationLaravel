@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Motif;
-use Illuminate\Http\Request;
-use League\CommonMark\Extension\Attributes\Node\Attributes;
 use App\Http\Requests\MotifRequest;
 use App\Models\Absence;
+use App\Models\Motif;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Session;
-use App\Http\Middleware\CheckAdminMiddleware;
 
 class MotifController extends Controller
 {
@@ -19,9 +15,9 @@ class MotifController extends Controller
      */
     public function index()
     {
-        if (auth()->user()->isA('admin'))
-        {
+        if (auth()->user()->isA('admin')) {
             $motifs = Motif::withTrashed()->get();
+
             return view('motif.index', compact('motifs'));
         } else {
             return redirect('/');
@@ -34,8 +30,7 @@ class MotifController extends Controller
      */
     public function create()
     {
-        if (auth()->user()->isA('admin'))
-        {
+        if (auth()->user()->isA('admin')) {
             return view('motif.create');
         } else {
             return redirect('/');
@@ -48,7 +43,7 @@ class MotifController extends Controller
      */
     public function store(MotifRequest $request)
     {
-        $motif = new Motif();
+        $motif = new Motif;
         $motif->libelle = $request->libelle;
 
         $motif->is_accessible_salarie = $request->is_accessible_salarie;
@@ -61,18 +56,14 @@ class MotifController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Motif $motif)
-    {
-
-    }
+    public function show(Motif $motif) {}
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Motif $motif)
     {
-        if (auth()->user()->isA('admin'))
-        {
+        if (auth()->user()->isA('admin')) {
             return view('motif.edit', compact('motif'));
         } else {
             return redirect('/');
@@ -111,9 +102,6 @@ class MotifController extends Controller
 
     /**
      * Restore the specified resource.
-     *
-     * @param Motif $motif
-     * @return RedirectResponse
      */
     public function restore(Motif $motif): RedirectResponse
     {

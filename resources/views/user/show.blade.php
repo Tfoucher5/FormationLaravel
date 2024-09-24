@@ -13,11 +13,11 @@ Absences de l'Utilisateur
                 <li class="bg-gray-50 p-5 rounded-lg shadow-md">
                     <div class="mb-2">
                         <strong>Date de début :</strong>
-                        <span class="text-gray-700">{{ $absence->date_debut }}</span>
+                        <span class="text-gray-700">{{ \Carbon\Carbon::parse($absence->date_debut)->format('d/m/Y') }}</span>
                     </div>
                     <div class="mb-2">
                         <strong>Date de fin :</strong>
-                        <span class="text-gray-700">{{ $absence->date_fin }}</span>
+                        <span class="text-gray-700">{{ \Carbon\Carbon::parse($absence->date_fin)->format('d/m/Y') }}</span>
                     </div>
                     <div>
                         <strong>Motif :</strong>
