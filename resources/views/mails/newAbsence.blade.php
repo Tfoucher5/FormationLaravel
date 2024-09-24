@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nouvelle absence</title>
+    <title>{{ __('new_absence') }}</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -57,16 +57,16 @@
 </head>
 <body>
     <div class="email-container">
-        <h1>Nouvelle absence signalée</h1>
-        <p><strong>Salarié :</strong> <span class="highlight">{{ $user->prenom . ' ' . $user->nom}}</span></p>
-        <p><strong>Motif :</strong> <span class="highlight">{{ $motif->libelle }}</span></p>
-        <p><strong>Date de début :</strong> <span class="highlight">{{ $absence->date_debut }}</span></p>
-        <p><strong>Date de fin :</strong> <span class="highlight">{{ $absence->date_fin }}</span></p>
+        <h1>{{ __('new_absence_reported') }}</h1>
+        <p><strong>{{ __('employee') }} :</strong> <span class="highlight">{{ $user->prenom . ' ' . $user->nom }}</span></p>
+        <p><strong>{{ __('reason') }} :</strong> <span class="highlight">{{ $motif->libelle }}</span></p>
+        <p><strong>{{ __('start_date') }} :</strong> <span class="highlight">{{ $absence->date_debut }}</span></p>
+        <p><strong>{{ __('end_date') }} :</strong> <span class="highlight">{{ $absence->date_fin }}</span></p>
 
-        <p>Veuillez consulter cette absence pour plus de détails.</p>
-        <a href="{{ route('absence.show', $absence->id) }}" class="btn">Voir l'absence</a>
+        <p>{{ __('please_consult_for_more_details') }}</p>
+        <a href="{{ route('absence.show', $absence->id) }}" class="btn">{{ __('view_absence') }}</a>
 
-        <p class="footer">Merci de vérifier les informations dès que possible.<br>L'équipe RH</p>
+        <p class="footer">{{ __('please_verify_information') }}<br>{{ __('the_hr_team') }}</p>
     </div>
 </body>
 </html>

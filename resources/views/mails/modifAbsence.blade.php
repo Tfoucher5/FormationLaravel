@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absence modifiée</title>
+    <title>{{ __('absence_modified') }}</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -57,13 +57,13 @@
 </head>
 <body>
     <div class="email-container">
-        <h1>Absence modifiée</h1>
-        <p>L'absence de <span class="highlight">{{ $user->name }}</span> a été modifiée avec succès.</p>
-        <p><strong>Motif :</strong> <span class="highlight">{{ $motif->libelle }}</span></p>
-        <p><strong>Date de début :</strong> <span class="highlight">{{ $absence->date_debut }}</span></p>
-        <p><strong>Date de fin :</strong> <span class="highlight">{{ $absence->date_fin }}</span></p>
-        <a href="#" class="btn">Voir les détails de l'absence</a>
-        <p class="footer">Merci de vérifier les informations si nécessaire.<br>L'équipe RH</p>
+        <h1>{{ __('absence_modified') }}</h1>
+        <p>{{ __('the_absence_of') }} <span class="highlight">{{ $user->name }}</span> {{ __('has_been_successfully_modified') }}.</p>
+        <p><strong>{{ __('reason') }} :</strong> <span class="highlight">{{ $motif->libelle }}</span></p>
+        <p><strong>{{ __('start_date') }} :</strong> <span class="highlight">{{ $absence->date_debut }}</span></p>
+        <p><strong>{{ __('end_date') }} :</strong> <span class="highlight">{{ $absence->date_fin }}</span></p>
+        <a href="#" class="btn">{{ __('view_absence_details') }}</a>
+        <p class="footer">{{ __('please_verify_if_needed') }}<br>{{ __('the_hr_team') }}</p>
     </div>
 </body>
 </html>

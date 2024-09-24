@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Votre absence a été validée</title>
+    <title>{{ __('your_absence_has_been_validated') }}</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -57,11 +57,11 @@
 </head>
 <body>
     <div class="email-container">
-        <h1>Bonjour {{ $user->prenom }},</h1>
-        <p>Nous souhaitons vous informer que votre absence du <span class="highlight">{{ $absence->date_debut }}</span> au <span class="highlight">{{ $absence->date_fin }}</span> a été validée par notre service.</p>
-        <p>Vous recevrez une notification en cas de modification. En attendant, vous pouvez consulter le détail de votre absence via votre espace personnel.</p>
-        <a href="#" class="btn">Voir mon absence</a>
-        <p class="footer">Merci de votre confiance.<br>L'équipe RH</p>
+        <h1>{{ __('hello') }} {{ $user->prenom }},</h1>
+        <p>{{ __('we_want_to_inform_you') }} {{ __('your_absence') }} {{ __('from') }} <span class="highlight">{{ $absence->date_debut }}</span> {{ __('to') }} <span class="highlight">{{ $absence->date_fin }}</span> {{ __('has_been_validated') }} {{ __('by_our_service') }}</p>
+        <p>{{ __('you_will_receive_a_notification') }} {{ __('in_case_of_modification') }} {{ __('meanwhile_you_can_check') }} {{ __('the_details_of_your_absence') }} {{ __('via_your_personal_space') }}.</p>
+        <a href="#" class="btn">{{ __('view_my_absence') }}</a>
+        <p class="footer">{{ __('thank_you_for_your_trust') }}<br>{{ __('the_hr_team') }}</p>
     </div>
 </body>
 </html>

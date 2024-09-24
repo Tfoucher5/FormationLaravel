@@ -78,9 +78,7 @@ return [
     |
     */
 
-    'locale' => 'fr',
-
-    'date_format' => 'Y-m-d H:i:s',
+    'locale' => env('APP_LOCALE', 'fr'),
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'fr'),
 

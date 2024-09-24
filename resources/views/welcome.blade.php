@@ -47,24 +47,24 @@
                 @if (session('message'))
                     <div class="text-red-600 mb-4">{{ session()->pull('message') }}</div>
                 @endif
-                <h1 class="text-9xl text-red-600 mb-12">Gestion des Absences</h1>
+                <h1 class="text-9xl text-red-600 mb-12">{{__('absence_manager')}}</h1>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     @can('view-absence')
                         <a class="text-6xl border-4 border-red-600 text-red-600 p-8 inline-block rounded-lg hover:bg-red-600 hover:text-white transition duration-300"
                             href="{{ route('absence.index') }}">
-                            Absences
+                            {{__('absences')}}
                         </a>
                     @endcan
                     @can('view-user')
                         <a class="text-6xl border-4 border-red-600 text-red-600 p-8 inline-block rounded-lg hover:bg-red-600 hover:text-white transition duration-300"
                             href="{{ route('user.index') }}">
-                            Utilisateurs
+                            {{__('users')}}
                         </a>
                     @endcan
                     @can('view-motif')
                         <a class="text-6xl border-4 border-red-600 text-red-600 p-8 inline-block rounded-lg hover:bg-red-600 hover:text-white transition duration-300"
                             href="{{ route('motif.index') }}">
-                            Motifs
+                            {{__('reasons')}}
                         </a>
                     @endcan
                 </div>
