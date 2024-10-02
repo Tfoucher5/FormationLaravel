@@ -103,5 +103,25 @@
     "absence_manager":"Gestion des Absences",
     "absences":"Absences",
     "users":"Utilisateurs",
-    "reasons":"Motifs"
+    "reasons":"Motifs",
+
+    "welcome": "Bienvenue",
+
+    "logged_in": "Vous êtes connecté !",
+    "log_in": "Se connecter",
+    "register": "S'inscrire",
+
+    "remember_me": "Se souvenir de moi",
+    "forgot_password": "Mot de passe oublié ?",
+    "email": "Adresse mail",
+    "forgot_password_message": "Vous avez oublié votre mot de passe? Pas de problème. Faites nous connaître votre adresse mail, nous vous enverrons un lien de réinitialisation qui vous permettra d'en choisir un nouveau",
+    "send_pass_reset": "Envoyer le lien de réinitialisation",
+    "secure_password": "Ceci est une partie sécurisée de l'application. Veuillez confirmer votre mot de passe pour continuer.",
+    "confirm": "Confirmer",
+    "already_registered":"Déjà inscrit ?",
+    "confirm_password": "Confirmation du mot de passe",
+    "reset_password": "Réinitialiser le mot de passe",
+    "resend_mail": "Renvoyer le mail de vérification",
+    "thanks_signup": "Merci de vous être inscrit! Avant de continuer, Pouvez-vous cliquer sur le lien que nous vous avons envoyé par mail? Si vous n'en avez pas reçu, nous vous en enverrons un autre avec plaisir.",
+    "new_link_sent": "Un nouveau lien de vérification à été envoyé à l'adresse utilisée lors de votre inscription."
 }

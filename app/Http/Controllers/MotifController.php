@@ -20,6 +20,7 @@ class MotifController extends Controller
 
             return view('motif.index', compact('motifs'));
         } else {
+            Session::put('message', "Vous n'avez pas l'autorisation d'accéder à cette page :/");
             return redirect('/');
         }
 
@@ -33,6 +34,7 @@ class MotifController extends Controller
         if (auth()->user()->isA('admin')) {
             return view('motif.create');
         } else {
+            Session::put('message', "Vous n'avez pas l'autorisation d'accéder à cette page :/");
             return redirect('/');
         }
 
@@ -56,7 +58,15 @@ class MotifController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Motif $motif) {}
+    public function show(Motif $motif) {
+
+        if (auth()->user()->isA('admin')) {
+            return view('motif.create');
+        } else {
+            Session::put('message', "Vous n'avez pas l'autorisation d'accéder à cette page :/");
+            return redirect('/');
+        }
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -66,6 +76,7 @@ class MotifController extends Controller
         if (auth()->user()->isA('admin')) {
             return view('motif.edit', compact('motif'));
         } else {
+            Session::put('message', "Vouos n'avez pas l'autorisation d'accéder à cette page :/");
             return redirect('/');
         }
     }

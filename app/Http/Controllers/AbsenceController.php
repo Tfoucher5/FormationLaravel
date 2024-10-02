@@ -34,14 +34,21 @@ class AbsenceController extends Controller
      */
     public function create()
     {
-        $motifs = Motif::where('is_accessible_salarie', true)->get();
         if (auth()->user()->isA('admin')) {
+
+            $motifs = Motif::all();
             $users = User::all();
+
+            return view('absence.create', compact('motifs', 'users'));
         } else {
+
+            $motifs = Motif::where('is_accessible_salarie', true)->get();
             $users = User::where('id', auth()->user()->id)->get();
+
+            Session::put('message', "Vous n'avez pas l'autorisation d'accéder à cette page :/");
+            return view('absence.create', compact('motifs', 'users'));
         }
 
-        return view('absence.create', compact('motifs', 'users'));
     }
 
     /**
@@ -69,11 +76,31 @@ class AbsenceController extends Controller
      */
     public function show(Absence $absence)
     {
-        $absences = Absence::where('id', $absence->id)->with('motif', 'user')->first();
-        $motif = $absence->motif;
-        $user = $absence->user;
 
-        return view('absence.show', compact('absences', 'motif', 'user'));
+        if (auth()->user()->isA('admin')) {
+            $absences = Absence::where('id', $absence->id)->with('motif', 'user')->first();
+            $motif = $absence->motif;
+            $user = $absence->user;
+
+            return view('absence.show', compact('absences', 'motif', 'user'));
+        } else {
+            if (auth()->user()->id != $absence->user->id) {
+                Session::put('message', "Vous n'avez pas l'autorisation d'accéder à cette page :/");
+                return redirect('/');
+            } else {
+
+                $absences = Absence::where('id', $absence->id)->with('motif', 'user')->first();
+                $motif = $absence->motif;
+                $user = $absence->user;
+
+                return view('absence.show', compact('absences', 'motif', 'user'));
+            }
+        }
+
+
+
+
+
     }
 
     /**

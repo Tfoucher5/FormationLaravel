@@ -102,5 +102,25 @@
     "absence_manager":"Absences Manager",
     "absences":"Absences",
     "users":"Users",
-    "reasons":"Reasons"
+    "reasons":"Reasons",
+
+    "welcome": "Welcome",
+
+    "logged_in": "You're logged in !",
+    "log_in": "Log In",
+    "register": "Register",
+
+    "remember_me": "Remember me",
+    "forgot_password": "Forgot your password ?",
+    "email": "email",
+    "forgot_password_message": "Forgot your password ? No problem. Let us know your email, we'll send you a link to choose a new one.",
+    "send_pass_reset": "Send reset link",
+    "secure_password": "This is a secure part of the app. Please confirm your password to continue.",
+    "confirm": "Confirm",
+    "already_registered":"Already registered ?",
+    "confirm_password": "Confirm password",
+    "reset_password": "Reset password",
+    "resend_mail": "Resend verification email",
+    "thanks_signup": "Thanks for registering! Before continuing, Could you click on the link we sent you by mail ? If you didn't received anything, we'll gladly send you another one.",
+    "new_link_sent": "A new reset link was sent to you with the email you used to register."
 }
