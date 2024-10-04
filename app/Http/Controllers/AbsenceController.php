@@ -41,11 +41,9 @@ class AbsenceController extends Controller
 
             return view('absence.create', compact('motifs', 'users'));
         } else {
-
             $motifs = Motif::where('is_accessible_salarie', true)->get();
             $users = User::where('id', auth()->user()->id)->get();
 
-            Session::put('message', "Vous n'avez pas l'autorisation d'accéder à cette page :/");
             return view('absence.create', compact('motifs', 'users'));
         }
 

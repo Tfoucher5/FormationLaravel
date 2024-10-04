@@ -4,6 +4,9 @@
 @endsection
 @section('content')
     <div class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        @if (session('message'))
+            <div class="bg-red-500 rounded-lg border border-black-850 p-1 mb-5 font-bold text-center text-white">{{ session()->pull('message') }}</div>
+        @endif
         <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">{{ __('absence_list') }} @if (auth()->user()->isA('admin'))
                 ({{ __('admin') }})
             @endif

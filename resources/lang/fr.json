@@ -123,5 +123,8 @@
     "reset_password": "Réinitialiser le mot de passe",
     "resend_mail": "Renvoyer le mail de vérification",
     "thanks_signup": "Merci de vous être inscrit! Avant de continuer, Pouvez-vous cliquer sur le lien que nous vous avons envoyé par mail? Si vous n'en avez pas reçu, nous vous en enverrons un autre avec plaisir.",
-    "new_link_sent": "Un nouveau lien de vérification à été envoyé à l'adresse utilisée lors de votre inscription."
+    "new_link_sent": "Un nouveau lien de vérification à été envoyé à l'adresse utilisée lors de votre inscription.",
+
+    "no_authorization": "Vous n'avez pas l'autorisation d'accéder à cette page :/",
+    "element_still_used": "L'élément est encore utilisé par une ou plusieurs absence(s) !"
 }

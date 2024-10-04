@@ -5,7 +5,9 @@
 @section('content')
 
     <div class="max-w-md mx-auto mt-10 bg-white shadow-lg rounded-lg p-6">
-
+        @if (session('message'))
+            <div class="bg-red-500 rounded-lg border border-black-850 p-1 mb-5 font-bold text-center text-white">{{ session()->pull('message') }}</div>
+        @endif
         <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">{{ __('create_absence') }}</h1>
 
         <form action="{{ route('absence.store') }}" method="POST">

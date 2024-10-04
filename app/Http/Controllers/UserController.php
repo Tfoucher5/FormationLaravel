@@ -18,8 +18,8 @@ class UserController extends Controller
 
             return view('user.index', compact('users'));
         } else {
-            Session::put('message', "Vous n'avez pas l'autorisation d'accéder à cette page :/");
-            return redirect('/');
+            Session::put('message', __('no_authorization'));
+            return redirect()->back();
         }
 
     }
@@ -32,8 +32,8 @@ class UserController extends Controller
         if (auth()->user()->isA('admin')) {
             return view('user.create');
         } else {
-            Session::put('message', "Vous n'avez pas l'autorisation d'accéder à cette page :/");
-            return redirect('/');
+            Session::put('message', __('no_authorization'));
+            return redirect()->back();
         }
 
     }
@@ -52,8 +52,8 @@ class UserController extends Controller
             $motifs = Motif::all();
             $absences = Absence::where('user_id', $user->id)->get();
         } else {
-            Session::put('message', "Vous n'avez pas l'autorisation d'accéder à cette page :/");
-            return redirect('/');
+            Session::put('message', __('no_authorization'));
+            return redirect()->back();
         }
 
 
@@ -68,7 +68,7 @@ class UserController extends Controller
         if ($nb === 0) {
             $user->delete();
         } else {
-            session()->put('message', "L'utilisateur est encore utilisé par {$nb} absence(s)");
+            session()->put('message', __('element_still_used'));
         }
 
         return redirect('user');

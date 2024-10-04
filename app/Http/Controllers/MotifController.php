@@ -20,8 +20,8 @@ class MotifController extends Controller
 
             return view('motif.index', compact('motifs'));
         } else {
-            Session::put('message', "Vous n'avez pas l'autorisation d'accéder à cette page :/");
-            return redirect('/');
+            Session::put('message', __('no_authorization'));
+            return redirect()->back();
         }
 
     }
@@ -34,8 +34,8 @@ class MotifController extends Controller
         if (auth()->user()->isA('admin')) {
             return view('motif.create');
         } else {
-            Session::put('message', "Vous n'avez pas l'autorisation d'accéder à cette page :/");
-            return redirect('/');
+            Session::put('message', __('no_authorization'));
+            return redirect()->back();
         }
 
     }
@@ -63,8 +63,8 @@ class MotifController extends Controller
         if (auth()->user()->isA('admin')) {
             return view('motif.create');
         } else {
-            Session::put('message', "Vous n'avez pas l'autorisation d'accéder à cette page :/");
-            return redirect('/');
+            Session::put('message', __('no_authorization'));
+            return redirect()->back();
         }
     }
 
@@ -76,8 +76,8 @@ class MotifController extends Controller
         if (auth()->user()->isA('admin')) {
             return view('motif.edit', compact('motif'));
         } else {
-            Session::put('message', "Vouos n'avez pas l'autorisation d'accéder à cette page :/");
-            return redirect('/');
+            Session::put('message', __('no_authorization'));
+            return redirect()->back();
         }
     }
 
@@ -105,7 +105,7 @@ class MotifController extends Controller
         if ($nb === 0) {
             $motif->delete();
         } else {
-            Session::put('message', "Le motif est encore utilisé par {$nb} absence(s)");
+            Session::put('message', session()->put('message', __('element_still_used')));
         }
 
         return redirect('motif');
