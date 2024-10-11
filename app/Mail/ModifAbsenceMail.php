@@ -2,9 +2,9 @@
 
 namespace App\Mail;
 
-use App\Models\User;
-use App\Models\Motif;
 use App\Models\Absence;
+use App\Models\Motif;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -16,7 +16,9 @@ class ModifAbsenceMail extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
+
     public $motif;
+
     public $absence;
 
     /**

@@ -17,13 +17,12 @@ class AbsenceFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
+    public function definition()
     {
-        // Récupérer un utilisateur et un motif aléatoires
-        $user = User::inRandomOrder()->first();
-        $motif = Motif::inRandomOrder()->first();
+        // S'assurer que les objets sont créés avant d'accéder à leurs IDs
+        $motif = Motif::factory()->create();  // Crée un motif
+        $user = User::factory()->create();    // Crée un utilisateur
 
-        // Générer les dates de début et de fin
         $dateDebut = Carbon::now()->addDays(random_int(0, 30));
         $dateFin = (clone $dateDebut)->addDays(random_int(1, 7));
 

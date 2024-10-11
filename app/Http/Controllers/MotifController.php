@@ -6,6 +6,7 @@ use App\Http\Requests\MotifRequest;
 use App\Models\Absence;
 use App\Models\Motif;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 
 class MotifController extends Controller
@@ -16,11 +17,16 @@ class MotifController extends Controller
     public function index()
     {
         if (auth()->user()->isA('admin')) {
-            $motifs = Motif::withTrashed()->get();
+
+            $motifs = Cache::remember('motifs', 3500, function () {
+                return Motif::withTrashed()->get();
+            });
 
             return view('motif.index', compact('motifs'));
+
         } else {
             Session::put('message', __('no_authorization'));
+
             return redirect()->back();
         }
 
@@ -35,6 +41,7 @@ class MotifController extends Controller
             return view('motif.create');
         } else {
             Session::put('message', __('no_authorization'));
+
             return redirect()->back();
         }
 
@@ -52,18 +59,22 @@ class MotifController extends Controller
 
         $motif->save();
 
+        Cache::forget('motifs');
+
         return redirect('motif');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Motif $motif) {
+    public function show(Motif $motif)
+    {
 
         if (auth()->user()->isA('admin')) {
             return view('motif.create');
         } else {
             Session::put('message', __('no_authorization'));
+
             return redirect()->back();
         }
     }
@@ -77,6 +88,7 @@ class MotifController extends Controller
             return view('motif.edit', compact('motif'));
         } else {
             Session::put('message', __('no_authorization'));
+
             return redirect()->back();
         }
     }
@@ -91,6 +103,8 @@ class MotifController extends Controller
         $motif->is_accessible_salarie = $request->input('is_accessible_salarie') === '1';
 
         $motif->save();
+
+        Cache::forget('motifs');
 
         return redirect('motif');
     }
@@ -108,6 +122,8 @@ class MotifController extends Controller
             Session::put('message', session()->put('message', __('element_still_used')));
         }
 
+        Cache::forget('motifs');
+
         return redirect('motif');
     }
 
@@ -117,6 +133,8 @@ class MotifController extends Controller
     public function restore(Motif $motif): RedirectResponse
     {
         $motif->restore();
+
+        Cache::forget('motifs');
 
         return redirect('motif');
     }
