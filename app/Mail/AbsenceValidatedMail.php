@@ -2,8 +2,8 @@
 
 namespace App\Mail;
 
-use App\Models\User;
 use App\Models\Absence;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -19,9 +19,6 @@ class AbsenceValidatedMail extends Mailable
 
     /**
      * Create a new message instance.
-     *
-     * @param User $user
-     * @param Absence $absence
      */
     public function __construct(User $user, Absence $absence)
     {

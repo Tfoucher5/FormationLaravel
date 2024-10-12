@@ -19,6 +19,7 @@ class UserController extends Controller
             return view('user.index', compact('users'));
         } else {
             Session::put('message', __('no_authorization'));
+
             return redirect()->back();
         }
 
@@ -33,6 +34,7 @@ class UserController extends Controller
             return view('user.create');
         } else {
             Session::put('message', __('no_authorization'));
+
             return redirect()->back();
         }
 
@@ -53,10 +55,9 @@ class UserController extends Controller
             $absences = Absence::where('user_id', $user->id)->get();
         } else {
             Session::put('message', __('no_authorization'));
+
             return redirect()->back();
         }
-
-
 
         return view('user.show', compact('absences', 'user', 'motifs'));
     }

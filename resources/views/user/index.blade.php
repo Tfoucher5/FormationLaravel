@@ -32,7 +32,7 @@
                     @endcan
                     @can('delete-user')
                         @if ($user->trashed())
-                            <a class="bg-green-500 rounded-lg border border-black-850 p-1 font-bold text-center text-white"
+                            <a class="bg-orange-500 rounded-lg border border-black-850 p-1 font-bold text-center text-white"
                                href="{{ route('user.restore', $user->id) }}">{{ __('restore') }}</a>
                         @else
                             <form action="{{ route('user.destroy', $user->id) }}" method="POST"

@@ -21,6 +21,8 @@ class AbsenceRequest extends FormRequest
      */
     public function rules(): array
     {
+        $rules['user_id'] = 'required|exists:users,id';
+        $rules['motif_id'] = 'required|exists:motifs,id';
         $rules['date_debut'] = 'required|date';
         $rules['date_fin'] = 'required|date|after_or_equal:date_debut';
 

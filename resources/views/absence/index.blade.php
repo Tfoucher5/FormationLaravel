@@ -44,6 +44,9 @@
                             @endcan
                         @endif
                         @can('delete-absence')
+                        @if ($absence->trashed())
+                            <a class="bg-orange-500 rounded-lg border border-black-850 p-1 font-bold text-center text-white" href="{{ route('absence.restore', $absence->id) }}">{{ __('restore') }}</a>
+                        @else
                             <form action="{{ route('absence.destroy', $absence->id) }}" method="POST"
                                 onsubmit="return confirm('{{ __('delete_confirm') }}');">
                                 @csrf
@@ -51,6 +54,7 @@
                                 <button type="submit"
                                     class="bg-red-500 rounded-lg border border-black-850 p-1 font-bold text-center text-white">{{ __('delete') }}</button>
                             </form>
+                        @endif
                         @endcan
                         @if (auth()->user()->isA('admin') && $absence->is_verified === 0)
                             <form action="{{ route('absence.validate', $absence->id) }}" method="POST" class="inline">

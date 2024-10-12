@@ -29,7 +29,7 @@
                     @endcan
                     @can('delete-motif')
                         @if ($motif->trashed())
-                            <a class="bg-green-500 rounded-lg border border-black-850 p-1 font-bold text-center text-white" href="{{ route('motif.restore', $motif->id) }}">{{ __('restore') }}</a>
+                            <a class="bg-orange-500 rounded-lg border border-black-850 p-1 font-bold text-center text-white" href="{{ route('motif.restore', $motif->id) }}">{{ __('restore') }}</a>
                         @else
                             <form action="{{ route('motif.destroy', $motif->id) }}" method="POST" onsubmit="return confirm('{{ __('delete_confirm') }}');">
                                 @csrf
