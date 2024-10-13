@@ -24,7 +24,7 @@ class ModifAbsenceMailControllerTest extends TestCase
         parent::setUp();
 
         $this->user = User::factory()->create(['prenom' => 'John', 'nom' => 'Doe']);
-        $this->motif = Motif::factory()->create(['Libelle' => 'Congé', 'is_accessible_salarie' => true]);
+        $this->motif = Motif::factory()->create(['libelle' => 'Congé', 'is_accessible_salarie' => true]);
         $this->absence = Absence::factory()->create([
             'user_id' => $this->user->id,
             'motif_id' => $this->motif->id,

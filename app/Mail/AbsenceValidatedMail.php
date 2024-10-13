@@ -14,8 +14,15 @@ class AbsenceValidatedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user;
-    public $absence;
+    /**
+     * @var \App\Models\User
+     */
+    public User $user;
+
+    /**
+     * @var \App\Models\Absence
+     */
+    public Absence $absence;
 
     /**
      * Create a new message instance.
@@ -42,7 +49,7 @@ class AbsenceValidatedMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mails.absenceValidated', // Vue du mail
+            view: 'mails.absenceValidated',
         );
     }
 

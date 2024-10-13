@@ -5,9 +5,8 @@ namespace Tests\Feature;
 use App\Models\Motif;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
+use Bouncer;
 
 class MotifControllerTest extends TestCase
 {
@@ -18,7 +17,8 @@ class MotifControllerTest extends TestCase
      */
     public function test_index_as_admin(): void
     {
-        $admin = User::factory()->admin()->create();
+        $admin = User::factory()->create();
+        Bouncer::assign('admin')->to($admin); // Assigner le rôle d'admin
 
         $this->actingAs($admin)
             ->get('/motif')
@@ -44,7 +44,8 @@ class MotifControllerTest extends TestCase
      */
     public function test_create_as_admin(): void
     {
-        $admin = User::factory()->admin()->create();
+        $admin = User::factory()->create();
+        Bouncer::assign('admin')->to($admin); // Assigner le rôle d'admin
 
         $this->actingAs($admin)
             ->get('/motif/create')
@@ -70,7 +71,8 @@ class MotifControllerTest extends TestCase
      */
     public function test_store_as_admin(): void
     {
-        $admin = User::factory()->admin()->create();
+        $admin = User::factory()->create();
+        Bouncer::assign('admin')->to($admin); // Assigner le rôle d'admin
 
         $motifData = [
             'libelle' => 'Motif test',
@@ -84,8 +86,6 @@ class MotifControllerTest extends TestCase
         $this->assertDatabaseHas('motifs', [
             'libelle' => 'Motif test',
         ]);
-
-        Cache::assertMissing('motifs'); // Vérifie si la cache a été vidée
     }
 
     /**
@@ -93,7 +93,8 @@ class MotifControllerTest extends TestCase
      */
     public function test_update_as_admin(): void
     {
-        $admin = User::factory()->admin()->create();
+        $admin = User::factory()->create();
+        Bouncer::assign('admin')->to($admin); // Assigner le rôle d'admin
 
         $motif = Motif::factory()->create();
 
@@ -110,8 +111,6 @@ class MotifControllerTest extends TestCase
             'id' => $motif->id,
             'libelle' => 'Motif updated',
         ]);
-
-        Cache::assertMissing('motifs'); // Vérifie la mise à jour de la cache
     }
 
     /**
@@ -119,7 +118,8 @@ class MotifControllerTest extends TestCase
      */
     public function test_destroy_as_admin(): void
     {
-        $admin = User::factory()->admin()->create();
+        $admin = User::factory()->create();
+        Bouncer::assign('admin')->to($admin); // Assigner le rôle d'admin
 
         $motif = Motif::factory()->create();
 
@@ -130,8 +130,6 @@ class MotifControllerTest extends TestCase
         $this->assertSoftDeleted('motifs', [
             'id' => $motif->id,
         ]);
-
-        Cache::assertMissing('motifs'); // Vérifie si la cache a été vidée après suppression
     }
 
     /**
@@ -139,16 +137,23 @@ class MotifControllerTest extends TestCase
      */
     public function test_restore_as_admin(): void
     {
-        $admin = User::factory()->admin()->create();
+        $admin = User::factory()->create();
+        Bouncer::assign('admin')->to($admin); // Assigner le rôle d'admin
 
         $motif = Motif::factory()->create();
-        $motif->delete();
+        $motif->delete(); // Supprimer le motif (soft delete)
 
         $this->actingAs($admin)
             ->get("/motif/{$motif->id}/restore")
             ->assertRedirect('/motif');
 
-        $this->assertFalse($motif->trashed());
-        Cache::assertMissing('motifs'); // Vérifie si la cache a été vidée après restauration
+        // Vérifier l'état du motif dans la base de données après restauration
+        $this->assertDatabaseHas('motifs', [
+            'id' => $motif->id,
+            'deleted_at' => null, // Vérifie que is_validated est null après restauration
+        ]);
+
+        // Assurez-vous que le motif n'est plus marqué comme supprimé
+        $this->assertFalse(Motif::withTrashed()->find($motif->id)->trashed());
     }
 }

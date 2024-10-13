@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -48,20 +49,35 @@ use Silber\Bouncer\Database\HasRolesAndAbilities;
  */
 class Absence extends Model
 {
+    /**
+     * 
+     * @use HasFactory<\Database\Factories\AbsenceFactory>
+     */
     use HasFactory;
     use HasRolesAndAbilities;
-    use softDeletes;
+    use SoftDeletes;
 
+    /**
+     * @var array<string>
+     */
     protected $dates = ['date_fin', 'date_debut'];
 
+    protected $fillable = ['motif_id', 'user_id', 'date_debut', 'date_fin'];
+
     // Définir la relation avec l'utilisateur
-    public function user()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, \App\Models\Absence>
+     */
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
     // Définir la relation avec le motif
-    public function motif()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\Motif, \App\Models\Absence>
+     */
+    public function motif(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Motif::class, 'motif_id');
     }

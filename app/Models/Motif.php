@@ -42,15 +42,22 @@ use Silber\Bouncer\Database\HasRolesAndAbilities;
  */
 class Motif extends Model
 {
-    use HasFactory;
+    /**
+     * 
+     * @use HasFactory<\Database\Factories\MotifFactory>
+    */
+    use HasFactory; // Ajoutez ici le type générique
     use HasRolesAndAbilities;
-    use softDeletes;
+    use SoftDeletes;
 
     protected $table = 'motifs';
 
     protected $fillable = ['libelle', 'is_accessible_salarie'];
 
-    public function absences()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Absence>
+     */
+    public function absences(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Absence::class, 'motif_id');
     }
@@ -58,5 +65,4 @@ class Motif extends Model
     protected $casts = [
         'is_accessible_salarie' => 'boolean',
     ];
-
 }

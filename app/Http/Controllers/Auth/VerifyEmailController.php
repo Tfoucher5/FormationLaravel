@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -14,14 +13,22 @@ class VerifyEmailController extends Controller
      */
     public function __invoke(EmailVerificationRequest $request): RedirectResponse
     {
-        if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
+        $user = $request->user();
+
+        // Assurez-vous que l'utilisateur est de type MustVerifyEmail
+        if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail) {
+            if ($user->hasVerifiedEmail()) {
+                return redirect()->intended(route('dashboard', absolute: false) . '?verified=1');
+            }
+
+            if ($user->markEmailAsVerified()) {
+                event(new Verified($user));
+            }
+        } else {
+            // Gérer le cas où l'utilisateur ne correspond pas au type attendu
+            abort(403, 'Unauthorized action.');
         }
 
-        if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
-        }
-
-        return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
+        return redirect()->intended(route('dashboard', absolute: false) . '?verified=1');
     }
 }

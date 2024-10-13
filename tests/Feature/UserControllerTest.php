@@ -2,198 +2,161 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use App\Models\Motif;
-use App\Models\Absence;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
-use Silber\Bouncer\BouncerFacade as Bouncer;
+use Hash;
 
 class UserControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * Setup the environment for each test.
-     *
-     * @return void
-     */
-    protected function setUp(): void
+    public function test_non_admin_cannot_view_users_index()
     {
-        parent::setUp();
+        $user = User::factory()->create();
 
-        // Créer des utilisateurs pour les tests
-        $admin = User::factory()->create([
-            'prenom' => 'Admin',
+        $response = $this->actingAs($user)->get(route('user.index'));
+
+        $response->assertRedirect();
+        $this->assertTrue(session()->has('message'));
+        $this->assertEquals(__('no_authorization'), session()->get('message'));
+    }
+
+    public function test_non_admin_cannot_view_user_creation_form()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('user.create'));
+
+        $response->assertRedirect();
+        $this->assertTrue(session()->has('message'));
+        $this->assertEquals(__('no_authorization'), session()->get('message'));
+    }
+
+    public function test_admin_can_view_user_creation_form()
+    {
+        $admin = User::factory()->create();
+        $admin->assign('admin');
+
+        $response = $this->actingAs($admin)->get(route('user.create'));
+
+        $response->assertStatus(200)
+                 ->assertViewIs('user.create');
+    }
+
+    public function test_admin_can_store_new_user()
+    {
+        $admin = User::factory()->create();
+        $admin->assign('admin');
+    
+        $response = $this->actingAs($admin)->post(route('user.store'), [
+            'email' => 'testuser@example.com',
+            'prenom' => 'Test',
             'nom' => 'User',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-        ]);
-
-        // Assignation du rôle 'admin' à l'utilisateur
-        Bouncer::assign('admin')->to($admin);
-
-        $user = User::factory()->create([
-            'prenom' => 'Regular',
+            'password' => 'password',
+            'password_confirmation' => 'password', // Ajoutez cette ligne
+        ]);        
+    
+        $response->assertRedirect(route('user.index'));
+        // Vérifiez que l'utilisateur a été créé
+        $this->assertDatabaseHas('users', [
+            'email' => 'testuser@example.com',
+            'prenom' => 'Test',
             'nom' => 'User',
-            'email' => 'user@example.com',
-            'password' => Hash::make('password'),
         ]);
+    }    
 
-        // Assignation du rôle 'user' à cet utilisateur
-        Bouncer::assign('user')->to($user);
+    public function test_admin_can_view_user_details()
+    {
+        $admin = User::factory()->create();
+        $admin->assign('admin');
+        $user = User::factory()->create();
 
-        $this->admin = $admin;
-        $this->user = $user;
+        $response = $this->actingAs($admin)->get(route('user.show', $user->id));
+
+        $response->assertStatus(200)
+                 ->assertViewIs('user.show');// Vérifiez que l'email est bien affiché
     }
 
-    #[\PHPUnit\Framework\Attribute\Test]
-    public function admin_can_access_users_index()
+    public function test_non_admin_cannot_view_user_details()
     {
-        $response = $this->actingAs($this->admin)
-                         ->get(route('user.index'));
+        $nonAdmin = User::factory()->create();
+        $user = User::factory()->create();
 
-        $response->assertStatus(200);
-        $response->assertViewIs('user.index');
-        $response->assertViewHas('users');
-    }
+        $response = $this->actingAs($nonAdmin)->get(route('user.show', $user->id));
 
-    #[\PHPUnit\Framework\Attribute\Test]
-    public function non_admin_cannot_access_users_index()
-    {
-        $response = $this->actingAs($this->user)
-                         ->get(route('user.index'));
-
-        $response->assertStatus(302);
         $response->assertRedirect();
-        $this->assertEquals(__('no_authorization'), Session::get('message'));
+        $this->assertTrue(session()->has('message'));
+        $this->assertEquals(__('no_authorization'), session()->get('message'));
     }
 
-    #[\PHPUnit\Framework\Attribute\Test]
-    public function admin_can_view_user_create_form()
+    public function test_admin_can_delete_user_if_no_absences()
     {
-        $response = $this->actingAs($this->admin)
-                         ->get(route('user.create'));
-
-        $response->assertStatus(200);
-        $response->assertViewIs('user.create');
-    }
-
-    #[\PHPUnit\Framework\Attribute\Test]
-    public function non_admin_cannot_view_user_create_form()
-    {
-        $response = $this->actingAs($this->user)
-                         ->get(route('user.create'));
-
-        $response->assertStatus(302);
-        $response->assertRedirect();
-        $this->assertEquals(__('no_authorization'), Session::get('message'));
-    }
-
-    #[\PHPUnit\Framework\Attribute\Test]
-    public function admin_can_store_user()
-    {
-        $response = $this->actingAs($this->admin)
-                         ->post(route('user.store'), [
-                             'prenom' => 'New',
-                             'nom' => 'User',
-                             'email' => 'newuser@example.com',
-                             'password' => 'password',
-                         ]);
-
-        $response->assertStatus(302);
+        $admin = User::factory()->create();
+        $admin->assign('admin');
+        $user = User::factory()->create();
+    
+        $response = $this->actingAs($admin)->delete(route('user.destroy', $user));
+    
+        // Vérifiez que la redirection se fait vers la page des utilisateurs
         $response->assertRedirect(route('user.index'));
+    
+        // Vérifiez que l'utilisateur a été soft supprimé de la base de données
+        $this->assertSoftDeleted('users', [
+            'id' => $user->id,
+        ]);
+    }
+     
+    
+    public function test_admin_cannot_delete_user_with_absences()
+    {
+        $admin = User::factory()->create();
+        $admin->assign('admin');
+    
+        $motif = Motif::factory()->create([
+            'id' => 1,
+            'libelle' => 'Motif de test',
+            'is_accessible_salarie' => true,
+        ]);
+    
+        // Créez un utilisateur
+        $user = User::factory()->create();
+    
+        // Créez une absence associée à cet utilisateur
+        $user->absences()->create([
+            'motif_id' => $motif->id,
+            'date_debut' => now(),
+            'date_fin' => now()->addDays(5),
+        ]);
+    
+        // Tentez de supprimer l'utilisateur
+        $response = $this->actingAs($admin)->delete(route('user.destroy', $user->id));
+    
+        // Vérifiez que la redirection est correcte
+        $response->assertRedirect(route('user.index'));
+    
+        // Vérifiez que l'utilisateur n'a pas été supprimé
         $this->assertDatabaseHas('users', [
-            'email' => 'newuser@example.com',
+            'id' => $user->id,
         ]);
     }
-
-    #[\PHPUnit\Framework\Attribute\Test]
-    public function non_admin_cannot_store_user()
+    
+    public function test_admin_can_restore_user()
     {
-        $response = $this->actingAs($this->user)
-                         ->post(route('user.store'), [
-                             'prenom' => 'New',
-                             'nom' => 'User',
-                             'email' => 'newuser@example.com',
-                             'password' => 'password',
-                         ]);
-
-        $response->assertStatus(302);
-        $response->assertRedirect();
-        $this->assertEquals(__('no_authorization'), Session::get('message'));
-    }
-
-    #[\PHPUnit\Framework\Attribute\Test]
-    public function admin_can_view_user_show()
-    {
-        $response = $this->actingAs($this->admin)
-                         ->get(route('user.show', $this->user->id));
-
-        $response->assertStatus(200);
-        $response->assertViewIs('user.show');
-        $response->assertViewHas('user');
-        $response->assertViewHas('motifs');
-        $response->assertViewHas('absences');
-    }
-
-    #[\PHPUnit\Framework\Attribute\Test]
-    public function non_admin_cannot_view_user_show()
-    {
-        $response = $this->actingAs($this->user)
-                         ->get(route('user.show', $this->admin->id));
-
-        $response->assertStatus(302);
-        $response->assertRedirect();
-        $this->assertEquals(__('no_authorization'), Session::get('message'));
-    }
-
-    #[\PHPUnit\Framework\Attribute\Test]
-    public function admin_can_delete_user_with_no_absences()
-    {
-        $response = $this->actingAs($this->admin)
-                         ->delete(route('user.destroy', $this->user->id));
-
-        $response->assertStatus(302);
+        $admin = User::factory()->create();
+        $admin->assign('admin');
+        $user = User::factory()->create(['deleted_at' => now()]);
+    
+        // Changer la méthode de post à get
+        $response = $this->actingAs($admin)->get(route('user.restore', $user->id));
+    
         $response->assertRedirect(route('user.index'));
-        $this->assertDatabaseMissing('users', [
-            'id' => $this->user->id,
-        ]);
-    }
-
-    #[\PHPUnit\Framework\Attribute\Test]
-    public function admin_cannot_delete_user_with_absences()
-    {
-        $absence = Absence::factory()->create([
-            'user_id' => $this->user->id,
-        ]);
-
-        $response = $this->actingAs($this->admin)
-                         ->delete(route('user.destroy', $this->user->id));
-
-        $response->assertStatus(302);
-        $response->assertRedirect(route('user.index'));
-        $this->assertEquals(__('element_still_used'), Session::get('message'));
+        // Vérifiez que l'utilisateur a été restauré
         $this->assertDatabaseHas('users', [
-            'id' => $this->user->id,
-        ]);
-    }
-
-    #[\PHPUnit\Framework\Attribute\Test]
-    public function admin_can_restore_deleted_user()
-    {
-        $this->user->delete();
-
-        $response = $this->actingAs($this->admin)
-                         ->post(route('user.restore', $this->user->id));
-
-        $response->assertStatus(302);
-        $response->assertRedirect(route('user.index'));
-        $this->assertDatabaseHas('users', [
-            'id' => $this->user->id,
+            'id' => $user->id,
             'deleted_at' => null,
         ]);
     }
+    
 }

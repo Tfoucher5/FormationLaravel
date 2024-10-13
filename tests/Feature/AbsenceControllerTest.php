@@ -134,4 +134,70 @@ class AbsenceControllerTest extends TestCase
             'deleted_at' => null,  // Vérifie que l'absence a été restaurée
         ]);
     }
+
+    /**
+     * Test si un administrateur ne peut pas valider une absence qui n'existe pas.
+     */
+    public function test_admin_cannot_validate_nonexistent_absence()
+    {
+        $admin = User::factory()->create();
+        Bouncer::assign('admin')->to($admin);
+
+        $this->actingAs($admin)
+            ->post(route('absence.validate', 999)) // ID d'absence qui n'existe pas
+            ->assertNotFound(); // Vérifie que la réponse est 404
+    }
+
+    /**
+     * Test si un administrateur ne peut pas supprimer une absence qui n'existe pas.
+     */
+    public function test_admin_cannot_delete_nonexistent_absence()
+    {
+        $admin = User::factory()->create();
+        Bouncer::assign('admin')->to($admin);
+
+        $this->actingAs($admin)
+            ->delete(route('absence.destroy', 999)) // ID d'absence qui n'existe pas
+            ->assertNotFound(); // Vérifie que la réponse est 404
+    }
+
+    /**
+     * Test si un administrateur ne peut pas restaurer une absence qui n'existe pas.
+     */
+    public function test_admin_cannot_restore_nonexistent_absence()
+    {
+        $admin = User::factory()->create();
+        Bouncer::assign('admin')->to($admin);
+
+        $this->actingAs($admin)
+            ->get(route('absence.restore', 999)) // ID d'absence qui n'existe pas
+            ->assertNotFound(); // Vérifie que la réponse est 404
+    }
+
+    /**
+     * Test si un administrateur ne peut pas accéder aux détails d'une absence qui n'existe pas.
+     */
+    public function test_admin_cannot_view_nonexistent_absence_details()
+    {
+        $admin = User::factory()->create();
+        Bouncer::assign('admin')->to($admin);
+
+        $this->actingAs($admin)
+            ->get(route('absence.show', 999)) // ID d'absence qui n'existe pas
+            ->assertNotFound(); // Vérifie que la réponse est 404
+    }
+
+    /**
+     * Test si un administrateur ne peut pas voir le formulaire d'édition d'une absence qui n'existe pas.
+     */
+    public function test_admin_cannot_view_nonexistent_absence_edit_form()
+    {
+        $admin = User::factory()->create();
+        Bouncer::assign('admin')->to($admin);
+
+        $this->actingAs($admin)
+            ->get(route('absence.edit', 999)) // ID d'absence qui n'existe pas
+            ->assertNotFound(); // Vérifie que la réponse est 404
+    }
+
 }

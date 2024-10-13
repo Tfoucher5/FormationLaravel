@@ -15,11 +15,20 @@ class AbsenceMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user;
+    /**
+     * @var \App\Models\User
+     */
+    public User $user;
 
-    public $motif;
+    /**
+     * @var \App\Models\Motif
+     */
+    public Motif $motif;
 
-    public $absence;
+    /**
+     * @var \App\Models\Absence
+     */
+    public Absence $absence;
 
     /**
      * Create a new message instance.

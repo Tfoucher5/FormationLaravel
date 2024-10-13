@@ -17,7 +17,7 @@ class MotifFactory extends Factory
     public function definition(): array
     {
         return [
-            'Libelle' => fake()->realText(20),
+            'libelle' => fake()->realText(20),
             'is_accessible_salarie' => fake()->boolean(chanceOfGettingTrue: 50),
         ];
     }

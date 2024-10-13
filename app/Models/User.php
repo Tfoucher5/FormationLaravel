@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Absence;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -53,18 +54,26 @@ use Silber\Bouncer\Database\HasRolesAndAbilities;
  *
  * @mixin \Eloquent
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, HasRolesAndAbilities, Notifiable, softDeletes;
+    /**
+     * 
+     * @use HasFactory<\Database\Factories\UserFactory>
+     */
+    use HasFactory; // Vous pouvez laisser cela sans type, Larastan devrait l'interpréter correctement.
+    use HasRolesAndAbilities, Notifiable, SoftDeletes;
 
-    public function absences()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Absence>
+     */
+    public function absences(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Absence::class, 'user_id');
     }
 
-    public function getInitialesAttribute()
+    public function getInitialesAttribute(): string
     {
-        return ucfirst($this->prenom)[0].ucfirst($this->nom)[0];
+        return ucfirst($this->prenom)[0] . ucfirst($this->nom)[0];
     }
 
     /**
